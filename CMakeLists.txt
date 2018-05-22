@@ -23,8 +23,8 @@ add_executable(${EXEC} ${SOURCES})
 find_package(OpenGL REQUIRED)
 
 #Build GLFW as shown at http://www.glfw.org/docs/latest/build_guide.html
-add_subdirectory(glfw-3.2.1)
-include_directories(glfw-3.2.1/include)
+add_subdirectory(glfw)
+include_directories(glfw/include)
 target_link_libraries(${EXEC} glfw)
 target_include_directories(${EXEC} PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(${EXEC} ${OPENGL_gl_LIBRARY})
