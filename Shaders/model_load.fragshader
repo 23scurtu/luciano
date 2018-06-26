@@ -1,0 +1,24 @@
+
+#version 330 core
+
+//interpolated values from vertex shaders
+
+in vec3 normal;
+in vec3 light;
+in vec2 TexCoords;
+
+out vec4 FragColor;
+
+uniform sampler2D texture_diffuse1;
+
+void main()
+{
+	// Set lightpow to 1 and uncomment below to set directional parrallel light
+	//vec3 light = vec3(0,-1,0);
+	float lightPow = 20;
+	float cosTheta = clamp( dot( normalize(normal),normalize(light)), 0,1 );
+
+
+	FragColor = texture(texture_diffuse1, TexCoords).rgba*lightPow*(max(cosTheta,0.6))/(length(light)*length(light));
+
+}
