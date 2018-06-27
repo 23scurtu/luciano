@@ -15,7 +15,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 #Set assimp variables
-set(BUILD_ASSIMP_TOOLS  ON)
+set(BUILD_ASSIMP_TOOLS  OFF)
 set(ASSIMP_BUILD_STATIC_LIB ON)
 
 #Bring the headers, such as Student.h into the project
@@ -44,13 +44,14 @@ target_link_libraries(${EXEC} ${OPENGL_gl_LIBRARY})
 
 #Build GLEW
 find_package(GLEW REQUIRED)
-add_subdirectory(${THIRD_PARTY_DIR}/glew/build/cmake)
+add_subdirectory(${THIRD_PARTY_DIR}/glew/build/cmake ${THIRD_PARTY_DIR}/glew/build/cmake)
 include_directories(${THIRD_PARTY_DIR}/glew/include)
 target_link_libraries(${EXEC} glew)
 include_directories(${GLEW_INCLUDE_DIRS})
 link_libraries(${GLEW_LIBRARIES})
 
 #Link assimp
+add_subdirectory(${THIRD_PARTY_DIR}/assimp ${THIRD_PARTY_DIR}/assimp)
 target_link_libraries(${EXEC} assimp)
 
 #Compile and link SOIL

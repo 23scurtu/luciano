@@ -1,6 +1,7 @@
 .*.dep
 *.a
 *.so
+*.so.*
 *.o
 build/*
 entityx/config.h
