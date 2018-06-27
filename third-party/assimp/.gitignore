@@ -1,3 +1,7 @@
+test/gtest/*
+contrib/cppunit-*/*
+contrib/cppunit_note.txt
+
 .idea
 build
 .project

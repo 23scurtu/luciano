@@ -16,6 +16,8 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 #Set assimp variables
 set(BUILD_ASSIMP_TOOLS  OFF)
+set(BUILD_ASSIMP_SAMPLES  OFF)
+set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_STATIC_LIB ON)
 
 #Bring the headers, such as Student.h into the project
