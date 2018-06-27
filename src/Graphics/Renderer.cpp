@@ -1,5 +1,7 @@
 #include "Renderer.h"
 #include <iostream>
+#include <chrono>
+using namespace std::chrono;
 
 using namespace std;
 
@@ -41,7 +43,7 @@ GLFWwindow* Renderer::createWindow(int width, int height, string name)
   return window;
 }
 
-int Renderer::setWindow(GLFWwindow* window)
+int Renderer::setWindow(GLFWwindow* window, int flags)
 {
   // Perhaps add ability to set such options
   // // draw in wireframe
@@ -63,6 +65,9 @@ int Renderer::setWindow(GLFWwindow* window)
 
   // Tell GLFW to capture our mouse, Remove when adding input system
   // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+  // Enable or disable v-sync
+  glfwSwapInterval(flags & VERTICAL_SYNC);
 
   return 0;
 }
