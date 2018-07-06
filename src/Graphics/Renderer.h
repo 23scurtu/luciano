@@ -5,12 +5,14 @@
 #include <vector>
 #include <string>
 #include "Model.h"
+#include "Window.h"
 
-
+class Renderer;
 
 //make abstract that returns this?
 // using Window = GLFWwindow;
 //make window a seperate class with pointer to renderer for more oop?
+
 
 enum WindowRenderOptions
 {
@@ -19,7 +21,7 @@ enum WindowRenderOptions
 
 class Renderer
 {
-  GLFWwindow* window;
+  Window* window;
 
   public:
 
@@ -28,10 +30,10 @@ class Renderer
 
   int init();
 
-  GLFWwindow* createWindow(int width, int height, std::string name);
-  int setWindow(GLFWwindow* window, int flags = 0);
+  Window* createWindow(int width, int height, std::string name);
+  int setWindow(Window* window, int flags = 0);
   //TODO Functions for changing window flags
-  GLFWwindow* getWindow();
+  Window* getWindow();
   void clear();
   void draw();
 };

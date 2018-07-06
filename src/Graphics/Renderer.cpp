@@ -30,20 +30,22 @@ int Renderer::init()
   return 0;
 }
 
-GLFWwindow* Renderer::createWindow(int width, int height, string name)
+Window* Renderer::createWindow(int width, int height, string name)
 {
-  GLFWwindow* window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
-  if (window == NULL)
+  GLFWwindow* glwindow = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
+  if (glwindow == NULL)
   {
       std::cout << "Failed to create GLFW window" << std::endl;
       glfwTerminate();
       return 0;
   }
 
+  Window* window = new Window(glwindow);
+
   return window;
 }
 
-int Renderer::setWindow(GLFWwindow* window, int flags)
+int Renderer::setWindow(Window* window, int flags)
 {
   // Perhaps add ability to set such options
   // // draw in wireframe
@@ -51,7 +53,7 @@ int Renderer::setWindow(GLFWwindow* window, int flags)
 
   this->window = window;
 
-  glfwMakeContextCurrent(window);
+  glfwMakeContextCurrent(window->window);
 
   // Initialize GLEW
   glewExperimental=true;
@@ -81,13 +83,13 @@ void Renderer::clear()
 
 void Renderer::draw()
 {
-  if(!window) throw;
+  if(!window->window) throw;
   // Swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-  glfwSwapBuffers(window);
+  glfwSwapBuffers(window->window);
   glfwPollEvents(); // Find way to decouple...
 }
 
-GLFWwindow* Renderer::getWindow()
+Window* Renderer::getWindow()
 {
   return window;
 }

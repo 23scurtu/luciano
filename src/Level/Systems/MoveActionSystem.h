@@ -6,14 +6,13 @@
 #include "Graphics/ResourceManager.h"
 #include "Level/Components.h"
 #include "Graphics/Renderer.h"
+#include "Input/InputHandler.h"
 
-class RenderingSystem: public entityx::System<RenderingSystem>
+class MoveActionSystem: public entityx::System<MoveActionSystem>
 {
-  ResourceManager& resources;
-  Renderer& renderer;
 
 public:
-  RenderingSystem(ResourceManager& resources, Renderer& renderer);
+  MoveActionSystem();
   void update(entityx::EntityManager &es,
               entityx::EventManager &events,
               entityx::TimeDelta dt) override;

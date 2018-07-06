@@ -6,14 +6,16 @@
 #include "Graphics/ResourceManager.h"
 #include "Level/Components.h"
 #include "Graphics/Renderer.h"
+#include "Input/InputHandler.h"
 
-class RenderingSystem: public entityx::System<RenderingSystem>
+class InputSystem: public entityx::System<InputSystem>
 {
-  ResourceManager& resources;
+  Keyboard keyboard;
+  InputHandler input_handler;
   Renderer& renderer;
 
 public:
-  RenderingSystem(ResourceManager& resources, Renderer& renderer);
+  InputSystem(Renderer& renderer);
   void update(entityx::EntityManager &es,
               entityx::EventManager &events,
               entityx::TimeDelta dt) override;
