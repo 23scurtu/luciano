@@ -4,11 +4,12 @@
 #include <string>
 #include "Graphics/ResourceManager.h"
 #include "Graphics/Renderer.h"
+#include "Timer.h"
 
 class Level
 {
 public:
-  virtual void update(entityx::TimeDelta dt) = 0;
+  virtual void update() = 0;
 };
 
 class MainLevel: public Level, public entityx::EntityX
@@ -16,7 +17,12 @@ class MainLevel: public Level, public entityx::EntityX
   ResourceManager resources;
   Renderer renderer;
 
+  Timer timer;
+  uint64_t next_game_tick;
+
+  void updateGameLogic();
+  void updateGraphics(entityx::TimeDelta dt);
 public:
   MainLevel(std::string filename);
-  void update(entityx::TimeDelta dt) override;
+  void update() override;
 };

@@ -21,8 +21,8 @@ InputHandler::InputHandler(Keyboard & keyboard): keyboard{keyboard}
 vector<Command*> InputHandler::handleKeyboardInput()
 {
   std::vector<Command*> commands;
-  std::cout << keyboard.getKeyInput(W_KEY) << std::endl;
-  std::cout << keyboard.getKeyInput(S_KEY) << std::endl;
+  // std::cout << keyboard.getKeyInput(W_KEY) << std::endl;
+  // std::cout << keyboard.getKeyInput(S_KEY) << std::endl;
 
   if(isDown(keyboard.getKeyInput(W_KEY))) commands.push_back(W_PRESS);
   if(isDown(keyboard.getKeyInput(A_KEY))) commands.push_back(A_PRESS);

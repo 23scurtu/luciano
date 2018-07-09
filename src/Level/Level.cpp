@@ -8,6 +8,10 @@
 
 using namespace std;
 
+const int GAME_TICKS_PER_SECOND = 60;
+const int TIMESTEP_TICKS = 1000000 / GAME_TICKS_PER_SECOND;
+const int TIMESTEP_SECS = static_cast<double>(1.0/GAME_TICKS_PER_SECOND);
+
 MainLevel::MainLevel( string filename )
 {
   systems.add<RenderingSystem>(resources, renderer);
@@ -30,11 +34,34 @@ MainLevel::MainLevel( string filename )
     glm::scale(glm::mat4(1.0f), glm::vec3(0.05f, 0.05f, 0.05f))
   );
   luciano_himself.assign<Input>(KEYBOARD);
+
+  timer.update();
+  next_game_tick = timer.curMicros();
 }
 
-void MainLevel::update(entityx::TimeDelta dt)
+void MainLevel::update()
+{
+  // Update timer (request the current time) once per frame
+  timer.update();
+  double dt = timer.deltaSecs();
+
+  while( timer.curMicros() > next_game_tick)
+  {
+    cout << dt << endl;
+    updateGameLogic();
+
+    next_game_tick += TIMESTEP_TICKS;
+  }
+
+  updateGraphics(dt);
+}
+
+void MainLevel::updateGameLogic()
+{
+  systems.update<InputSystem>(TIMESTEP_SECS);
+  systems.update<MoveActionSystem>(TIMESTEP_SECS);
+}
+void MainLevel::updateGraphics(entityx::TimeDelta dt)
 {
   systems.update<RenderingSystem>(dt);
-  systems.update<InputSystem>(dt);
-  systems.update<MoveActionSystem>(dt);
 }
