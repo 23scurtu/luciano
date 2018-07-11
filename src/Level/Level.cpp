@@ -2,7 +2,7 @@
 #include "Components.h"
 #include "Systems/RenderingSystem.h"
 #include "Systems/InputSystem.h"
-#include "Systems/MoveActionSystem.h"
+#include "Systems/MovementSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -10,7 +10,7 @@ using namespace std;
 
 const int GAME_TICKS_PER_SECOND = 60;
 const int TIMESTEP_TICKS = 1000000 / GAME_TICKS_PER_SECOND;
-const int TIMESTEP_SECS = static_cast<double>(1.0/GAME_TICKS_PER_SECOND);
+const double TIMESTEP_SECS = static_cast<double>(1.0/GAME_TICKS_PER_SECOND);
 
 MainLevel::MainLevel( string filename )
 {
@@ -18,7 +18,7 @@ MainLevel::MainLevel( string filename )
   // Decouple RenderingSystem needing to be called before Input System
   // (due to Rendering system initing the renderer)
   systems.add<InputSystem>(renderer);
-  systems.add<MoveActionSystem>();
+  systems.add<MovementSystem>();
 
   systems.configure();
 
@@ -59,7 +59,7 @@ void MainLevel::update()
 void MainLevel::updateGameLogic()
 {
   systems.update<InputSystem>(TIMESTEP_SECS);
-  systems.update<MoveActionSystem>(TIMESTEP_SECS);
+  systems.update<MovementSystem>(TIMESTEP_SECS);
 }
 void MainLevel::updateGraphics(entityx::TimeDelta dt)
 {

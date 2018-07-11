@@ -49,3 +49,11 @@ struct MoveAction
   MoveAction() = default;
   MoveAction(glm::vec3 velocity): velocity{velocity}{}
 };
+
+struct Movement
+{
+  glm::vec3 velocity;
+  glm::vec3 acceleration;
+
+  Movement() = default;
+};
