@@ -3,6 +3,7 @@
 #include "Systems/RenderingSystem.h"
 #include "Systems/InputSystem.h"
 #include "Systems/MovementSystem.h"
+#include "Systems/TransformSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -17,6 +18,7 @@ MainLevel::MainLevel( string filename )
   systems.add<RenderingSystem>(resources, renderer);
   // Decouple RenderingSystem needing to be called before Input System
   // (due to Rendering system initing the renderer)
+  systems.add<TransformSystem>();
   systems.add<InputSystem>(renderer);
   systems.add<MovementSystem>();
 
@@ -27,12 +29,13 @@ MainLevel::MainLevel( string filename )
   luciano_himself.assign<Draw>("resources/luciano_himself/doing_it/luciano_renormal.obj",
                       "Shaders/model_load.vertshader",
                       "Shaders/model_load.fragshader");
-  luciano_himself.assign<Transform>(
-    glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-    glm::rotate(glm::mat4(1.0f),float( 3*M_PI/2), glm::vec3(1.0f,0.0f,0.0f))
-        * glm::rotate(glm::mat4(1.0f), float(1*M_PI), glm::vec3(0.0f,1.0f,0.0f)),
-    glm::scale(glm::mat4(1.0f), glm::vec3(0.05f, 0.05f, 0.05f))
-  );
+  luciano_himself.assign<Transform>();
+
+  // float( -2*M_PI/2) glm::vec3(0.0f,1.0f,-1.0f);
+  luciano_himself.component<Transform>()->localRotation = glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI));
+  luciano_himself.component<Transform>()->localScale = glm::vec3(0.05f, 0.05f, 0.05f);
+  luciano_himself.component<Transform>()->localDirty = true;
+
   luciano_himself.assign<Input>(KEYBOARD);
 
   timer.update();
@@ -63,5 +66,6 @@ void MainLevel::updateGameLogic()
 }
 void MainLevel::updateGraphics(entityx::TimeDelta dt)
 {
+  systems.update<TransformSystem>(dt);
   systems.update<RenderingSystem>(dt);
 }

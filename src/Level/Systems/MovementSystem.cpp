@@ -14,8 +14,9 @@ void MovementSystem::translateEntity(glm::vec3 velocity,
 {
   // Perhaps have a MoveActionSystem and a MovementSystem that inherit from
   // a common system to provide common functionality.
-  glm::mat4 translate = glm::translate(glm::mat4(1.0f), float(dt) * velocity);
-  transform->translate *= translate;
+  glm::vec3 translate = float(dt) * velocity;
+  transform->localTranslation += translate;
+  transform->localDirty = true;
 }
 
 void MovementSystem::update

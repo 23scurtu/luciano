@@ -34,10 +34,7 @@ void RenderingSystem::update
       shader->setUniformMat4("projection", projection);
       shader->setUniformMat4("view", view);
 
-    // Create the model matrix by applying the transforms
-    glm::mat4 modelmat = transform->translate *transform->rotation * transform->scale;
-
-    shader->setUniformMat4("model", modelmat);
+    shader->setUniformMat4("model", transform->worldMatrix);
     shader->setUniformVec3("in_light", glm::vec3(0.0f,-4.5f,-1.0f));
     model->Draw(*shader);
   }

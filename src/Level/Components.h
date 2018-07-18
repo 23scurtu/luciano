@@ -1,9 +1,13 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <string>
 #include "entityx/entityx.h"
 #include "Input/Command.h"
+#include <vector>
 
 struct Draw
 {
@@ -20,12 +24,19 @@ struct Transform
 {
   Transform() = default;
   Transform( glm::mat4 translate, glm::mat4 rotation, glm::mat4 scale):
-    translate(translate), rotation(rotation), scale(scale) {}
+    worldMatrix(translate*rotation*scale){}
+
+  bool localDirty = false;
+  bool finalDirty = false;
+
+  glm::vec3 localTranslation;
+  glm::quat localRotation;
+  glm::vec3 localScale;
 
   entityx::Entity parent;
-  glm::mat4 translate;
-  glm::mat4 rotation;
-  glm::mat4 scale;
+  std::vector<entityx::Entity> children;
+
+  glm::mat4 worldMatrix;
 };
 
 enum InputType
