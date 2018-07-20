@@ -32,9 +32,8 @@ MainLevel::MainLevel( string filename )
   luciano_himself.assign<Transform>();
 
   // float( -2*M_PI/2) glm::vec3(0.0f,1.0f,-1.0f);
-  luciano_himself.component<Transform>()->localRotation = glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI));
-  luciano_himself.component<Transform>()->localScale = glm::vec3(0.05f, 0.05f, 0.05f);
-  luciano_himself.component<Transform>()->localDirty = true;
+  luciano_himself.component<Transform>()->setLocalRotation(glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI)));
+  luciano_himself.component<Transform>()->setLocalScale(glm::vec3(0.05f, 0.05f, 0.05f));
 
   luciano_himself.assign<Input>(KEYBOARD);
 

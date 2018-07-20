@@ -34,7 +34,7 @@ void RenderingSystem::update
       shader->setUniformMat4("projection", projection);
       shader->setUniformMat4("view", view);
 
-    shader->setUniformMat4("model", transform->worldMatrix);
+    shader->setUniformMat4("model", transform->getWorldMatrix());
     shader->setUniformVec3("in_light", glm::vec3(0.0f,-4.5f,-1.0f));
     model->Draw(*shader);
   }
