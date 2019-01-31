@@ -8,6 +8,7 @@
 #include "entityx/entityx.h"
 #include "Input/Command.h"
 #include <vector>
+#include <set>
 
 struct Draw
 {
@@ -18,6 +19,40 @@ struct Draw
   std::string filename;
   std::string vertshader;
   std::string fragshader;
+};
+
+struct PerspectiveCamera
+{
+  friend class RenderingSystem;
+
+private:
+  bool projection_dirty = true;
+
+  // target_display of 0 indicates the default game window.
+  unsigned int target_display = 0;
+
+  float fovy;
+  float aspect_ratio;
+  float near, far;
+
+  glm::mat4 projection;
+
+public:
+
+  PerspectiveCamera() = default;
+  PerspectiveCamera(float fovy, float aspect_ratio, float near = 0.1f, float far = 100.0f):
+    fovy{fovy}, aspect_ratio{aspect_ratio}, near{near}, far{far}{}
+
+  float getFovy(){ return fovy; };
+  float getAspectRatio(){ return aspect_ratio; };
+  float getNear(){ return near; };
+  float getFar(){ return far; };
+  const glm::mat4& getProjection(){ return projection; }
+
+  void setFovy(float fovy){ this->fovy = fovy; projection_dirty = true; }
+  void setAspectRatio(float aspect_ratio){ this->aspect_ratio = aspect_ratio; projection_dirty = true; }
+  void setNear(float near){ this->near = near; projection_dirty = true; }
+  void setFar(float far){ this->far = far; projection_dirty = true; }
 };
 
 struct Transform
@@ -41,6 +76,8 @@ public:
   Transform() = default;
   Transform( glm::mat4 translate, glm::mat4 rotation, glm::mat4 scale):
     worldMatrix(translate*rotation*scale){}
+  Transform( glm::vec3 translation, glm::quat rotation, glm::vec3 scale):
+    localTranslation{translation}, localRotation{rotation}, localScale{scale}{}
 
   const glm::vec3& getLocalTranslation(){ return localTranslation; }
   const glm::quat& getLocalRotation(){ return localRotation; }

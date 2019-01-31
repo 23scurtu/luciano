@@ -30,12 +30,13 @@ MainLevel::MainLevel( string filename )
                       "Shaders/model_load.vertshader",
                       "Shaders/model_load.fragshader");
   luciano_himself.assign<Transform>();
-
-  // float( -2*M_PI/2) glm::vec3(0.0f,1.0f,-1.0f);
   luciano_himself.component<Transform>()->setLocalRotation(glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI)));
   luciano_himself.component<Transform>()->setLocalScale(glm::vec3(0.05f, 0.05f, 0.05f));
-
   luciano_himself.assign<Input>(KEYBOARD);
+
+  entityx::Entity main_camera = entities.create();
+  main_camera.assign<PerspectiveCamera>(glm::radians(45.0f), 800.0/600.0);
+  main_camera.assign<Transform>(glm::vec3(0.0f,10.0f,0.0f), glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI)), glm::vec3(1,1,1));
 
   timer.update();
   next_game_tick = timer.curMicros();
