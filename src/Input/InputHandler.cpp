@@ -12,10 +12,10 @@ bool isUp(KeyAction action)
 InputHandler::InputHandler(Keyboard & keyboard): keyboard{keyboard}
 {
   // Assign bindings
-  W_PRESS = new MoveCommand(glm::vec3(0.0,0.0,1.0));
-  A_PRESS = new MoveCommand(glm::vec3(1.0,0.0,0.0));
-  S_PRESS = new MoveCommand(glm::vec3(0.0,0.0,-1.0));
-  D_PRESS = new MoveCommand(glm::vec3(-1.0,0.0,0.0));
+  W_PRESS = new MoveCommand(glm::vec3(0.0,0.0,-1.0));
+  A_PRESS = new MoveCommand(glm::vec3(-1.0,0.0,0.0));
+  S_PRESS = new MoveCommand(glm::vec3(0.0,0.0,1.0));
+  D_PRESS = new MoveCommand(glm::vec3(1.0,0.0,0.0));
 }
 
 vector<Command*> InputHandler::handleKeyboardInput()

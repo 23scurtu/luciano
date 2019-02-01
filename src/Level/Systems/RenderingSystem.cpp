@@ -44,8 +44,10 @@ void RenderingSystem::update
     // view/projection transformations
     glm::mat4 projection, view;
     projection = main_camera.component<PerspectiveCamera>()->projection;
+    // TODO Add more indepth transformation to make camera vertical, horizontal
+    // and depth directions consistent with normal game objects.
     view = glm::toMat4(main_camera.component<Transform>()->getLocalRotation()) 
-         * glm::translate(glm::mat4(1.0f),main_camera.component<Transform>()->getLocalTranslation());
+         * glm::translate(glm::mat4(1.0f),(-1.0f)*main_camera.component<Transform>()->getLocalTranslation());
     
     shader->setUniformMat4("projection", projection);
     shader->setUniformMat4("view", view);
