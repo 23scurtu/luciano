@@ -1,5 +1,6 @@
 /bin/*
 /lib/*
+.vscode
 
 # External junk
 .DS_Store
