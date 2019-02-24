@@ -10,7 +10,10 @@
 
 class InputSystem: public entityx::System<InputSystem>
 {
+  // TODO Abstract devices and have input system hold a list of them?
   Keyboard keyboard;
+  Mouse mouse;
+
   InputHandler input_handler;
   Renderer& renderer;
 

@@ -116,10 +116,10 @@ struct MoveAction
   MoveAction(glm::vec3 velocity): velocity{velocity}{}
 };
 
-struct Movement
+struct RotateAction
 {
-  glm::vec3 velocity;
-  glm::vec3 acceleration;
+  glm::vec3 rotation;
 
-  Movement() = default;
+  RotateAction() = default;
+  RotateAction(glm::vec3 rotation): rotation{rotation} {}
 };

@@ -32,7 +32,6 @@ MainLevel::MainLevel( string filename )
   luciano_himself.assign<Transform>();
   luciano_himself.component<Transform>()->setLocalRotation(glm::quat(glm::vec3(-M_PI/2,0.0f,M_PI)));
   luciano_himself.component<Transform>()->setLocalScale(glm::vec3(0.05f, 0.05f, 0.05f));
-  //luciano_himself.assign<Input>(KEYBOARD);
 
   entityx::Entity main_camera = entities.create();
   main_camera.assign<PerspectiveCamera>(glm::radians(45.0f), 800.0/600.0);
