@@ -42,9 +42,10 @@ enum Axis
 class RotateCommand: public AnalogCommand
 {
   Axis axis;
+  bool is_global;
   public:
   // TODO Make mouse_pos from center?
-  RotateCommand(Axis axis):
-    axis{axis} {}
+  RotateCommand(Axis axis, bool is_global = false):
+    axis{axis}, is_global{is_global} {}
   void execute(entityx::Entity &entity) override;
 };

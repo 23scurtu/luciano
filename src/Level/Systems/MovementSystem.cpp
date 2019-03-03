@@ -23,12 +23,29 @@ void MovementSystem::translateEntity(glm::vec3 velocity,
 }
 
 void MovementSystem::rotateEntity(glm::vec3 euler_rotation,
-  entityx::ComponentHandle<Transform> transform)
+  entityx::ComponentHandle<Transform> transform, bool is_global)
 {
-  glm::quat qPitch = glm::angleAxis(euler_rotation.x, glm::vec3(1, 0, 0));
-  glm::quat qYaw =  glm::angleAxis(euler_rotation.y, glm::vec3(0, 1, 0));
-  glm::quat qRoll = glm::angleAxis(euler_rotation.z, glm::vec3(0, 0, 1));
-  
+  glm::vec3 x_axis(1, 0, 0);
+  glm::vec3 y_axis(0, 1, 0);
+  glm::vec3 z_axis(0, 0, 1);
+
+  if(is_global)
+  {
+    glm::mat4 inverse = transform->getLocalMatrix();
+
+    // For efficiency only multiply inverse if needed
+    if(euler_rotation.x != 0.0) x_axis = transform->transformDirection(x_axis);
+    if(euler_rotation.y != 0.0) y_axis = transform->transformDirection(y_axis);
+    if(euler_rotation.z != 0.0) z_axis = transform->transformDirection(z_axis);
+  }
+
+  //std::cout << "rot " << x_axis.x << ", " << x_axis.y << ", " << x_axis.z << std::endl;
+
+
+  glm::quat qPitch = glm::angleAxis(euler_rotation.x, x_axis);
+  glm::quat qYaw =  glm::angleAxis(euler_rotation.y, y_axis);
+  glm::quat qRoll = glm::angleAxis(euler_rotation.z, z_axis);
+
   glm::quat rotQuat = qYaw *qPitch * qRoll;
 
   transform->applyRotation(rotQuat);
@@ -39,6 +56,7 @@ void MovementSystem::update
 {
   entityx::ComponentHandle<MoveAction> move_action;
   entityx::ComponentHandle<RotateAction> rotate_action;
+  entityx::ComponentHandle<GlobalRotateAction> global_rotate_action;
   entityx::ComponentHandle<Transform> transform;
 
   // Movement system handles any movement in game. Any actions to move
@@ -50,6 +68,12 @@ void MovementSystem::update
   {
     translateEntity(move_action->velocity, dt,transform);
     move_action.remove();
+  }
+
+  for (entityx::Entity entity : es.entities_with_components(global_rotate_action,transform))
+  {
+    rotateEntity(global_rotate_action->rotation, transform, true);
+    global_rotate_action.remove();
   }
 
   for (entityx::Entity entity : es.entities_with_components(rotate_action,transform))

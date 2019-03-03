@@ -19,19 +19,40 @@ void MoveCommand::execute(entityx::Entity &entity)
 
 void RotateCommand::execute(entityx::Entity &entity)
 {
-  entityx::ComponentHandle<RotateAction> action = entity.component<RotateAction>();
-  if(!action)
+  if(is_global)
   {
-    entity.assign<RotateAction>(glm::vec3(0.0,0.0,0.0));
-    action = entity.component<RotateAction>();
-  }
+    entityx::ComponentHandle<GlobalRotateAction> action = entity.component<GlobalRotateAction>();
+    if(!action)
+    {
+      entity.assign<GlobalRotateAction>(glm::vec3(0.0,0.0,0.0));
+      action = entity.component<GlobalRotateAction>();
+    }
 
-  // TEMP Code to test actions 
-  // TODO Make from center?
-  switch(axis)
+    // TEMP Code to test actions 
+    // TODO Make from center?
+    switch(axis)
+    {
+      case X_AXIS: action->rotation.x += getAnalog(); break;
+      case Y_AXIS: action->rotation.y += getAnalog(); break;
+      case Z_AXIS: action->rotation.z += getAnalog(); break;
+    }
+  }
+  else
   {
-    case X_AXIS: action->rotation.x += getAnalog(); break;
-    case Y_AXIS: action->rotation.y += getAnalog(); break;
-    case Z_AXIS: action->rotation.z += getAnalog(); break;
+    entityx::ComponentHandle<RotateAction> action = entity.component<RotateAction>();
+    if(!action)
+    {
+      entity.assign<RotateAction>(glm::vec3(0.0,0.0,0.0));
+      action = entity.component<RotateAction>();
+    }
+
+    // TEMP Code to test actions 
+    // TODO Make from center?
+    switch(axis)
+    {
+      case X_AXIS: action->rotation.x += getAnalog(); break;
+      case Y_AXIS: action->rotation.y += getAnalog(); break;
+      case Z_AXIS: action->rotation.z += getAnalog(); break;
+    }
   }
 }

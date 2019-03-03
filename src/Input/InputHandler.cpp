@@ -18,7 +18,7 @@ InputHandler::InputHandler(Keyboard & keyboard, Mouse & mouse, Window* window):
   S_PRESS = new MoveCommand(glm::vec3(0.0,0.0,1.0));
   D_PRESS = new MoveCommand(glm::vec3(1.0,0.0,0.0));
 
-  MOUSE_MOVE_X = new RotateCommand(Z_AXIS);
+  MOUSE_MOVE_X = new RotateCommand(Z_AXIS, true);
   MOUSE_MOVE_Y = new RotateCommand(X_AXIS);
 }
 
@@ -41,7 +41,7 @@ vector<Command*> InputHandler::handleInput()
     {
       // TODO Pull out rotation speed (0.002)
       MOUSE_MOVE_X->setAnalog(( mouse.getPosInput().x - window->getWidth()/2 - last_mouse_pos.x) * 0.002);
-      MOUSE_MOVE_Y->setAnalog(( mouse.getPosInput().y - window->getHeight()/2 - last_mouse_pos.y) * 0.002);
+      MOUSE_MOVE_Y->setAnalog(-( mouse.getPosInput().y - window->getHeight()/2 - last_mouse_pos.y) * 0.002);
 
       commands.push_back(MOUSE_MOVE_X);
       commands.push_back(MOUSE_MOVE_Y);

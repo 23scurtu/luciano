@@ -3,8 +3,13 @@
 
 class TransformSystem: public entityx::System<TransformSystem>
 {
-  void recalculateFinal(entityx::ComponentHandle<Transform> transform);
-  void dirtyChildren(entityx::ComponentHandle<Transform> transform);
+  // TODO Move these helpers to transform component?
+  friend class Transform;
+
+  static void recalculateFinal(entityx::ComponentHandle<Transform> transform);
+  static void recalculateInverseFinal(entityx::ComponentHandle<Transform> transform);
+  static void dirtyChildren(entityx::ComponentHandle<Transform> transform);
+  static void dirtyInverseChildren(entityx::ComponentHandle<Transform> transform);
   
 public:
   TransformSystem();

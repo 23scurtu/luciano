@@ -4,6 +4,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include "entityx/entityx.h"
 #include "Input/Command.h"
@@ -62,6 +63,7 @@ struct Transform
 private:
   bool localDirty = false;
   bool finalDirty = false;
+  bool finalInverseDirty = false;
 
   glm::vec3 localTranslation;
   glm::quat localRotation;
@@ -71,6 +73,10 @@ private:
   std::vector<entityx::Entity> children;
 
   glm::mat4 worldMatrix;
+  glm::mat4 localMatrix; // Inverse matrix
+
+  // glm::vec3 minRotationClamp;
+  // glm::vec3 maxRotationClamp;
 
 public:
   Transform() = default;
@@ -83,14 +89,52 @@ public:
   const glm::quat& getLocalRotation(){ return localRotation; }
   const glm::vec3& getLocalScale(){ return localScale; }
 
+  glm::vec3 transformDirection(const glm::vec3 & direction)
+  {
+    glm::vec3 origin(0.0, 0.0, 0.0);
+    return  glm::vec3(worldMatrix * glm::vec4(direction,1)) - glm::vec3(worldMatrix * glm::vec4(origin,1));
+  }
+  glm::vec3 inverseTransformDirection(const glm::vec3 & direction)
+  {
+    glm::vec3 origin(0.0, 0.0, 0.0);
+    return  glm::vec3(localMatrix * glm::vec4(direction,1)) - glm::vec3(localMatrix * glm::vec4(origin,1));
+  }
+
+  //TODO Calculate last step here if dirty
   const glm::mat4& getWorldMatrix(){ return worldMatrix; }
+  const glm::mat4& getLocalMatrix(){ return localMatrix; }
+
+  // void recalculateInverseFinal()
+  // {
+  //   // Duplicated code from TransformSystem::recalculateFinal
+  //   if(localDirty || finalInverseDirty)
+  //   {
+  //     entityx::ComponentHandle<Transform> parent_transform;
+  //     if(parent.valid())
+  //     {
+  //       parent.component<Transform>()->recalculateInverseFinal();
+  //       parent_transform = parent.component<Transform>();
+  //     }
+
+  //     // Create the model matrix by applying the transforms
+  //     localMatrix = glm::scale(glm::mat4(1.0f), -localScale)
+  //       * glm::toMat4(glm::conjugate(localRotation))
+  //       * glm::translate(glm::mat4(1.0f), -localTranslation);
+
+  //     // TODO parent* local?
+  //     if(parent_transform) localMatrix = parent_transform->localMatrix * localMatrix;
+  //     finalInverseDirty = false;
+  //   }
+  // }
+
+  // void setRotationClamp(glm::vec3 min, glm::vec3 max);
 
   void setLocalTranslation(const glm::vec3& translation){ localTranslation = translation; localDirty = true; }
   void setLocalRotation(const glm::quat& rotation){ localRotation = rotation; localDirty = true; }
   void setLocalScale(const glm::vec3& scale){ localScale = scale; localDirty = true; }
 
   void applyTranslation(glm::vec3 translation){ localTranslation += translation; localDirty = true; }
-  void applyRotation(glm::quat rotation){ localRotation *= rotation; localDirty = true; }
+  void applyRotation(glm::quat rotation){ localRotation =  rotation * localRotation; localDirty = true; }
   void applyScale(glm::vec3 scale){ localScale *= scale; localDirty = true; }
 };
 
@@ -119,7 +163,17 @@ struct MoveAction
 struct RotateAction
 {
   glm::vec3 rotation;
+  bool is_global  = false;
 
   RotateAction() = default;
   RotateAction(glm::vec3 rotation): rotation{rotation} {}
+};
+
+struct GlobalRotateAction
+{
+  glm::vec3 rotation;
+  bool is_global  = false;
+
+  GlobalRotateAction() = default;
+  GlobalRotateAction(glm::vec3 rotation): rotation{rotation} {}
 };

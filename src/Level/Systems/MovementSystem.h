@@ -15,7 +15,8 @@ class MovementSystem: public entityx::System<MovementSystem>
     entityx::ComponentHandle<Transform> transform);
 
   void rotateEntity(glm::vec3 euler_rotation,
-    entityx::ComponentHandle<Transform> transform);
+    entityx::ComponentHandle<Transform> transform,
+    bool is_global = false);
 
 public:
   MovementSystem();
